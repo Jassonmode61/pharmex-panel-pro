@@ -1,0 +1,61 @@
+// src/pages/Payouts.jsx
+import React, { useMemo } from "react";
+
+// Sipariş verilerini Orders sayfasındaki gibi alıyor varsayıyoruz.
+// Eğer merkezi state yoksa buraya örnek dummy orders eklenebilir.
+import ordersData from "../data/orders.json"; // <-- kendi verinize göre uyarlayın
+
+export default function Payouts() {
+  const KOMISYON_ORANI = 0.07; // %7 sabit komisyon
+
+  // Yardımcı fonksiyon: verilen tarih aralığındaki siparişleri filtrele
+  const hesaplaHakedis = (baslangicGun, bitisGun) => {
+    const filtered = ordersData.filter((o) => {
+      const d = new Date(o.date);
+      const gun = d.getDate();
+      return gun >= baslangicGun && gun <= bitisGun;
+    });
+
+    const toplamCiro = filtered.reduce((sum, o) => sum + o.total, 0);
+    const komisyon = toplamCiro * KOMISYON_ORANI;
+    const netHakedis = toplamCiro - komisyon;
+
+    return {
+      siparisSayisi: filtered.length,
+      toplamCiro,
+      komisyon,
+      netHakedis,
+    };
+  };
+
+  // 01–15 ve 16–31 arası ayrı hesap
+  const hakedisIlkYari = useMemo(() => hesaplaHakedis(1, 15), []);
+  const hakedisIkinciYari = useMemo(() => hesaplaHakedis(16, 31), []);
+
+  return (
+    <main className="page payouts">
+      <h1>Hakedişler</h1>
+      <p>Komisyon oranı: %7</p>
+
+      <div className="payout-grid">
+        {/* Sol kutu */}
+        <div className="card">
+          <h2>01–15 Arası</h2>
+          <p><strong>Sipariş Sayısı:</strong> {hakedisIlkYari.siparisSayisi}</p>
+          <p><strong>Toplam Ciro:</strong> ₺{hakedisIlkYari.toplamCiro.toFixed(2)}</p>
+          <p><strong>Komisyon (%7):</strong> ₺{hakedisIlkYari.komisyon.toFixed(2)}</p>
+          <p><strong>Net Hakediş:</strong> ₺{hakedisIlkYari.netHakedis.toFixed(2)}</p>
+        </div>
+
+        {/* Sağ kutu */}
+        <div className="card">
+          <h2>16–31 Arası</h2>
+          <p><strong>Sipariş Sayısı:</strong> {hakedisIkinciYari.siparisSayisi}</p>
+          <p><strong>Toplam Ciro:</strong> ₺{hakedisIkinciYari.toplamCiro.toFixed(2)}</p>
+          <p><strong>Komisyon (%7):</strong> ₺{hakedisIkinciYari.komisyon.toFixed(2)}</p>
+          <p><strong>Net Hakediş:</strong> ₺{hakedisIkinciYari.netHakedis.toFixed(2)}</p>
+        </div>
+      </div>
+    </main>
+  );
+}

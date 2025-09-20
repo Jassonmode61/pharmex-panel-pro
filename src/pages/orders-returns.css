@@ -1,0 +1,78 @@
+/* Basit tablo, buton, rozet ve modal stilleri – yalın ve çakışmasız */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table th, .table td {
+  border: 1px solid #e5e7eb;
+  padding: 8px 10px;
+  text-align: left;
+}
+.table thead th {
+  background: #f8fafc;
+  font-weight: 600;
+}
+
+.btn {
+  appearance: none;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #0f172a;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.btn:hover { background: #f8fafc; }
+.btn:disabled { opacity: .6; cursor: not-allowed; }
+.btn.primary {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #fff;
+}
+.btn.primary:hover { filter: brightness(.95); }
+
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  border: 1px solid #cbd5e1;
+  background: #eef2f7;
+  color: #334155;
+}
+.badge.green { background: #e8f6ee; border-color: #4caf50; color: #256f34; }
+.badge.warning { background: #fff5e6; border-color: #f5a623; color: #7a4b00; }
+.badge.gray { background: #eef1f5; border-color: #cbd5e1; color: #334155; }
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  z-index: 1001;
+  max-width: 720px;
+  width: 92%;
+  box-shadow: 0 10px 30px rgba(0,0,0,.2);
+}
+.modal-head .title { font-weight: 700; }
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.35);
+  z-index: 1000;
+}
+
+/* Sayfalama */
+.pager {
+  display: flex; justify-content: center; gap: 6px; margin-top: 12px;
+}
+.pager .btn.primary { background:#2563eb; color:#fff; border-color:#2563eb; }
+
+/* Küçük yardımcı layout’lar */
+.container h2 { margin: 0 0 12px; }
+.card { border: 1px solid #e5e7eb; border-radius: 12px; background: #fff; }
+.card .body { padding: 14px; }
+.toolbar { text-align: right; }

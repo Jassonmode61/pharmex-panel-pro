@@ -1,0 +1,220 @@
+import { useMemo, useState } from "react";
+import ordersData from "../data/orders.json";
+
+const formatTRY = (v) =>
+  new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY" }).format(v || 0);
+
+const COMMISSION_RATE = 7; // %
+
+function parseD(d) {
+  // Tarihleri güvenli parse et (saat ekle, TZ sorunlarını minimize et)
+  return new Date(d + "T00:00:00");
+}
+
+function getMonth(oDate) {
+  return oDate.getMonth() + 1; // 1..12
+}
+function getYear(oDate) {
+  return oDate.getFullYear();
+}
+function halfOfMonth(oDate) {
+  const day = oDate.getDate();
+  return day <= 15 ? "01–15" : "16–31";
+}
+
+export default function Payouts() {
+  // Varsayılan olarak eldeki verilerden ilk siparişin ay/yılına ayarla (yoksa bugünkü)
+  const first = ordersData?.[0] ? parseD(ordersData[0].date) : new Date();
+  const [month, setMonth] = useState(getMonth(first));
+  const [year, setYear] = useState(getYear(first));
+
+  const { rows, totals, halves } = useMemo(() => {
+    // Seçilen ay/yıla göre süz
+    const filtered = (ordersData || []).filter((o) => {
+      const d = parseD(o.date);
+      return getYear(d) === Number(year) && getMonth(d) === Number(month);
+    });
+
+    // Toplamlar
+    const gross = filtered.reduce((acc, o) => acc + Number(o.total || 0), 0);
+    const commission = (gross * COMMISSION_RATE) / 100;
+    const net = gross - commission;
+
+    // Yarılar (01–15, 16–31)
+    const h = { first: { label: "01–15", gross: 0 }, second: { label: "16–31", gross: 0 } };
+    filtered.forEach((o) => {
+      const d = parseD(o.date);
+      const bucket = d.getDate() <= 15 ? "first" : "second";
+      h[bucket].gross += Number(o.total || 0);
+    });
+
+    return {
+      rows: filtered
+        .map((o) => {
+          const d = parseD(o.date);
+          return {
+            id: o.id,
+            date: o.date,
+            customer: o.customerName,
+            address: o.customerAddress,
+            status: o.status,
+            total: Number(o.total || 0),
+            half: halfOfMonth(d),
+          };
+        })
+        .sort((a, b) => (a.date < b.date ? -1 : 1)),
+      totals: { gross, commission, net },
+      halves: h,
+    };
+  }, [month, year]);
+
+  const years = useMemo(() => {
+    // Verideki yılları topla; yoksa 2024..2027 göster
+    const ys = new Set();
+    (ordersData || []).forEach((o) => ys.add(getYear(parseD(o.date))));
+    const arr = Array.from(ys).sort();
+    return arr.length ? arr : [2024, 2025, 2026, 2027];
+  }, []);
+
+  return (
+    <main>
+      <h1>Hakedişler</h1>
+
+      {/* Ay/Yıl seçimi */}
+      <section className="page-block">
+        <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+          <div>
+            <label style={{ display: "block", opacity: 0.8, marginBottom: 6 }}>Ay</label>
+            <select value={month} onChange={(e) => setMonth(Number(e.target.value))}>
+              {[
+                "Ocak","Şubat","Mart","Nisan","Mayıs","Haziran",
+                "Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık",
+              ].map((mName, idx) => (
+                <option key={idx + 1} value={idx + 1}>{mName}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label style={{ display: "block", opacity: 0.8, marginBottom: 6 }}>Yıl</label>
+            <select value={year} onChange={(e) => setYear(Number(e.target.value))}>
+              {years.map((y) => (
+                <option key={y} value={y}>{y}</option>
+              ))}
+            </select>
+          </div>
+          <div style={{ marginLeft: "auto", opacity: 0.8 }}>
+            Komisyon Oranı: <strong>%{COMMISSION_RATE}</strong>
+          </div>
+        </div>
+      </section>
+
+      {/* 01–15 ve 16–31 kutuları */}
+      <section className="page-block">
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <div className="card">
+            <div className="head">01–15</div>
+            <div className="body">
+              <div style={{ fontSize: 26, fontWeight: 700, marginBottom: 4 }}>
+                {formatTRY(halves.first.gross)}
+              </div>
+              <div style={{ opacity: 0.8 }}>Dönem brüt</div>
+            </div>
+          </div>
+          <div className="card">
+            <div className="head">16–31</div>
+            <div className="body">
+              <div style={{ fontSize: 26, fontWeight: 700, marginBottom: 4 }}>
+                {formatTRY(halves.second.gross)}
+              </div>
+              <div style={{ opacity: 0.8 }}>Dönem brüt</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Özet kartları */}
+      <section className="page-block">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 16 }}>
+          <div className="card">
+            <div className="head">Brüt Ciro</div>
+            <div className="body" style={{ fontSize: 24, fontWeight: 700 }}>
+              {formatTRY(totals.gross)}
+            </div>
+          </div>
+          <div className="card">
+            <div className="head">Komisyon (%{COMMISSION_RATE})</div>
+            <div className="body" style={{ fontSize: 24, fontWeight: 700 }}>
+              {formatTRY(totals.commission)}
+            </div>
+          </div>
+          <div className="card">
+            <div className="head">Net Hakediş</div>
+            <div className="body" style={{ fontSize: 24, fontWeight: 700 }}>
+              {formatTRY(totals.net)}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Detay tablo */}
+      <section className="page-block table-sm">
+        <div className="table-wrap">
+          <table className="framed">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Tarih</th>
+                <th>Müşteri</th>
+                <th>Durum</th>
+                <th>Dönem</th>
+                <th style={{ textAlign: "right" }}>Tutar</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.length === 0 && (
+                <tr>
+                  <td colSpan={6} style={{ opacity: 0.7, padding: 16 }}>
+                    Bu ay için sipariş bulunamadı.
+                  </td>
+                </tr>
+              )}
+              {rows.map((r) => (
+                <tr key={r.id}>
+                  <td>{r.id}</td>
+                  <td>{r.date}</td>
+                  <td>
+                    <div style={{ fontWeight: 600 }}>{r.customer}</div>
+                    {r.address && (
+                      <div style={{ opacity: 0.75, fontSize: 13 }}>{r.address}</div>
+                    )}
+                  </td>
+                  <td>
+                    <span className="badge">{r.status}</span>
+                  </td>
+                  <td>{r.half}</td>
+                  <td style={{ textAlign: "right", fontWeight: 600 }}>{formatTRY(r.total)}</td>
+                </tr>
+              ))}
+            </tbody>
+            {rows.length > 0 && (
+              <tfoot>
+                <tr>
+                  <td colSpan={5} style={{ textAlign: "right", fontWeight: 700 }}>Brüt</td>
+                  <td style={{ textAlign: "right", fontWeight: 700 }}>{formatTRY(totals.gross)}</td>
+                </tr>
+                <tr>
+                  <td colSpan={5} style={{ textAlign: "right" }}>Komisyon (%{COMMISSION_RATE})</td>
+                  <td style={{ textAlign: "right" }}>{formatTRY(totals.commission)}</td>
+                </tr>
+                <tr>
+                  <td colSpan={5} style={{ textAlign: "right", fontWeight: 700 }}>Net</td>
+                  <td style={{ textAlign: "right", fontWeight: 700 }}>{formatTRY(totals.net)}</td>
+                </tr>
+              </tfoot>
+            )}
+          </table>
+        </div>
+      </section>
+    </main>
+  );
+}

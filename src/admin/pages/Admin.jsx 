@@ -1,0 +1,29 @@
+// src/pages/Admin.jsx
+import React, { useState } from "react";
+import AdminLayout from "../admin/components/AdminLayout.jsx";
+
+// Alt sayfalar
+import AdminDashboard from "../admin/pages/AdminDashboard.jsx";
+import AdminOrders from "../admin/pages/AdminOrders.jsx";
+import AdminReturns from "../admin/pages/AdminReturns.jsx";
+import AdminPayouts from "../admin/pages/AdminPayouts.jsx";
+
+export default function Admin() {
+  const [tab, setTab] = useState("dashboard");
+
+  return (
+    <AdminLayout tab={tab} setTab={setTab}>
+      {tab === "dashboard" && (
+        <section className="card">
+          <h2>Admin • Özet</h2>
+          <p>Toplam sipariş/ciro/ret oranı gibi özetler.</p>
+          <AdminDashboard />
+        </section>
+      )}
+
+      {tab === "orders" && <AdminOrders />}
+      {tab === "returns" && <AdminReturns />}
+      {tab === "payouts" && <AdminPayouts />}
+    </AdminLayout>
+  );
+}

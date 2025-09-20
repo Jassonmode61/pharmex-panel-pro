@@ -1,0 +1,94 @@
+import React, { useEffect, useState } from "react";
+
+// Sayfa bileşenleri
+import Home from "./pages/Home";            // Başlangıç
+import Products from "./pages/Products";    // Ürün Yönetimi
+import Orders from "./pages/Orders";        // Siparişler
+import Returns from "./pages/Returns";      // İadeler
+import Payouts from "./pages/Payouts";      // Hakedişler (YENİ)
+import Documents from "./pages/Documents";  // Evraklar
+import Settings from "./pages/Settings";    // Ayarlar
+
+function NavBtn({ active, onClick, children }) {
+  return (
+    <button
+      type="button"
+      className={`nav-btn${active ? " active" : ""}`}
+      onClick={onClick}
+      aria-current={active ? "page" : undefined}
+    >
+      {children}
+    </button>
+  );
+}
+
+export default function App() {
+  const [page, setPage] = useState("home");
+
+  useEffect(() => {
+    const initial =
+      (typeof window !== "undefined" &&
+        window.location.hash.replace("#", "")) || "home";
+    setPage(initial || "home");
+
+    const onHash = () => {
+      const p = window.location.hash.replace("#", "") || "home";
+      setPage(p);
+    };
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+
+  useEffect(() => {
+    const current = `#${page}`;
+    if (typeof window !== "undefined" && window.location.hash !== current) {
+      window.location.hash = current;
+    }
+  }, [page]);
+
+  return (
+    <>
+      <nav className="navbar">
+        <div className="nav-inner">
+          <div className="brand" role="img" aria-label="Pharmex">
+            <span className="pill">💊</span>
+            <span className="brand-name">Pharmex</span>
+            <span className="brand-sub">Satıcı Paneli</span>
+          </div>
+
+          <div className="nav-links">
+            <NavBtn active={page === "home"} onClick={() => setPage("home")}>
+              Başlangıç
+            </NavBtn>
+            <NavBtn active={page === "products"} onClick={() => setPage("products")}>
+              Ürün Yönetimi
+            </NavBtn>
+            <NavBtn active={page === "orders"} onClick={() => setPage("orders")}>
+              Siparişler
+            </NavBtn>
+            <NavBtn active={page === "returns"} onClick={() => setPage("returns")}>
+              İadeler
+            </NavBtn>
+            <NavBtn active={page === "payouts"} onClick={() => setPage("payouts")}>
+              Hakedişler
+            </NavBtn>
+            <NavBtn active={page === "documents"} onClick={() => setPage("documents")}>
+              Evraklar
+            </NavBtn>
+            <NavBtn active={page === "settings"} onClick={() => setPage("settings")}>
+              Ayarlar
+            </NavBtn>
+          </div>
+        </div>
+      </nav>
+
+      {page === "home" && <Home />}
+      {page === "products" && <Products />}
+      {page === "orders" && <Orders />}
+      {page === "returns" && <Returns />}
+      {page === "payouts" && <Payouts />}
+      {page === "documents" && <Documents />}
+      {page === "settings" && <Settings />}
+    </>
+  );
+}

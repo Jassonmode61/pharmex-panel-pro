@@ -1,0 +1,13 @@
+:root {
+  --bg: #0f172a;        /* slate-900 */
+  --panel: #111827;     /* gray-900 */
+  --muted: #94a3b8;     /* slate-400 */
+  --text: #e5e7eb;      /* gray-200 */
+  --primary: #3b82f6;   /* blue-500 */
+  --card: #0b1220;
+  --border: #1f2937;
+}
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.5 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+a { color: inherit; text-decoration: none; }

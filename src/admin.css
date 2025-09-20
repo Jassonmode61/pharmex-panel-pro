@@ -1,0 +1,376 @@
+/* ===========================
+   Admin UI – unified styles
+   =========================== */
+
+/* Theme vars */
+:root{
+  --bg:#0f172a;
+  --bg-2:#111827;
+  --panel:#0b1324;
+  --card:#0f172a;
+  --border:#1f2937;
+  --muted:#9ca3af;
+  --text:#e5e7eb;
+  --primary:#2563eb;
+  --success:#16a34a;
+  --danger:#dc2626;
+  --warning:#f59e0b;
+}
+
+/* Reset / base */
+*{ box-sizing:border-box; }
+html,body,#root{ height:100%; }
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue","Apple Color Emoji","Segoe UI Emoji";
+}
+a{ color:inherit; text-decoration:none; }
+
+/* ===========================
+   Shell
+   =========================== */
+.admin-shell{
+  display:grid;
+  grid-template-columns:260px 1fr;
+  height:100%;
+}
+.admin-aside{
+  background:var(--panel);
+  border-right:1px solid var(--border);
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+.brand{ display:flex; gap:12px; align-items:center; }
+.pill{ font-size:22px; }
+.brand-title{ font-weight:700; }
+.brand-sub{ font-size:12px; color:var(--muted); }
+.admin-main{ display:flex; flex-direction:column; min-width:0; }
+
+.topbar{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:14px 20px;
+  border-bottom:1px solid var(--border);
+  background:var(--bg-2);
+  position:sticky; top:0; z-index:10;
+}
+.topbar .chip{
+  background:#0f172a;
+  border:1px solid var(--border);
+  padding:8px 10px; border-radius:999px; color:var(--muted);
+  margin-right:auto;
+}
+.topbar-actions{ display:flex; gap:10px; }
+.topbar-btn{ display:inline-flex; align-items:center; gap:8px; }
+
+/* ===========================
+   Sidebar (unified)
+   =========================== */
+.side-nav { padding:8px 10px; }
+.side-list { margin:0; padding:0; list-style:none; }
+.side-item + .side-item { margin-top:4px; }
+.side-link{
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px; border-radius:10px;
+  color:#cbd5e1; transition:background .15s ease,color .15s ease;
+}
+.side-link:hover{ background:rgba(148,163,184,.10); color:#e2e8f0; }
+.side-link.active{
+  background:rgba(59,130,246,.15);
+  color:#fff; box-shadow:inset 0 0 0 1px rgba(59,130,246,.35);
+}
+.side-icon{ width:22px; text-align:center; opacity:.9; }
+.side-text{ font-size:14px; font-weight:500; }
+
+/* list-style garanti temizliği */
+.admin-aside ul, .admin-aside li { list-style:none; }
+.admin-aside li::marker{ content:""; }
+
+/* ===========================
+   Page & Card
+   =========================== */
+.page{ padding:22px 24px 40px; }
+.cards{ display:grid; gap:16px; }
+.cards.grid-4{ grid-template-columns:repeat(4,minmax(0,1fr)); }
+.cards.grid-3{ grid-template-columns:repeat(3,minmax(0,1fr)); }
+.cards.grid-2{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:16px;
+}
+.card-head,
+.card-title-row{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:12px;
+}
+.card-title{ margin:0; font-size:28px; font-weight:700; }
+.actions{ display:flex; gap:8px; }
+
+/* ===========================
+   Form helpers
+   =========================== */
+.field{ display:flex; flex-direction:column; gap:8px; min-width:0; }
+.label{ font-size:13px; color:var(--muted); }
+.input{
+  background:#0b1324; color:#fff;
+  border:1px solid var(--border); border-radius:10px;
+  padding:10px 12px; width:100%;
+}
+.input:disabled{ opacity:.6; cursor:not-allowed; }
+.inline{ display:flex; align-items:center; gap:10px; }
+.hint{ color:var(--muted); font-size:12px; }
+.pill-badge{ padding:4px 8px; border:1px solid var(--border); border-radius:999px; }
+
+/* Buttons & badges */
+.btn{ background:var(--primary); border:none; color:#fff; padding:10px 14px; border-radius:10px; cursor:pointer; }
+.btn.sm{ padding:6px 10px; font-size:13px; }
+.btn.ghost{ background:transparent; border:1px solid var(--border); color:var(--text); }
+.btn.secondary{ background:#1f2937; color:#fff; }
+.btn.success{ background:var(--success); }
+.btn.danger{ background:var(--danger); }
+.btn.primary{ background:#3b82f6; color:#fff; }
+
+.badge{
+  display:inline-flex; align-items:center; justify-content:center;
+  height:20px; min-width:20px; padding:0 8px;
+  border-radius:999px; font-size:12px;
+  background:rgba(239,68,68,.15); color:#ef4444;
+}
+.badge.green{ background:rgba(34,197,94,.15); color:#22c55e; }
+.badge.red  { background:rgba(239,68,68,.15); color:#ef4444; }
+.badge.amber{ background:rgba(245,158,11,.15); color:#f59e0b; }
+
+/* ===========================
+   Table & Pagination (unified)
+   =========================== */
+.table-wrap{ overflow:auto; }
+.table{ width:100%; border-collapse:collapse; }
+.table th,.table td{
+  padding:12px;
+  border-bottom:1px solid rgba(148,163,184,.15);
+  text-align:left;
+  font-size:14px;
+}
+.table tbody tr:hover{ background:rgba(255,255,255,.03); }
+
+.status-dot{ display:inline-block; width:8px; height:8px; border-radius:999px; margin-right:6px; }
+.dot-green{ background:var(--success); }
+.dot-red  { background:var(--danger); }
+
+.pagination{
+  display:flex; gap:10px; align-items:center;
+  justify-content:flex-end; margin-top:12px;
+}
+.pagination button{ padding:6px 12px; font-size:13px; border-radius:8px; }
+.pagination button:disabled{ opacity:.35; cursor:not-allowed; }
+.page-info{ color:#94a3b8; font-size:13px; }
+
+/* ===========================
+   Modal (UNIFIED – büyük ve ortalı)
+   =========================== */
+.modal-backdrop{
+  position:fixed; inset:0; z-index:1000;
+  background:rgba(0,0,0,.55);
+  display:grid; place-items:center;
+  padding:16px;
+}
+.modal-card{
+  width:min(720px, 96vw);            /* geniş */
+  background:var(--card);
+  color:var(--text);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  box-shadow:0 12px 40px rgba(0,0,0,.45);
+}
+.modal-head{
+  padding:16px 20px; font-weight:700; font-size:18px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.modal-body{ padding:18px 20px; }
+.modal-foot{
+  padding:14px 20px; display:flex; gap:8px; justify-content:flex-end;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.modal-form{ display:grid; gap:12px; }
+.modal-form .row{ display:grid; gap:12px; grid-template-columns:1fr 1fr; }
+.modal-form label{ font-size:12px; opacity:.85; }
+.modal-form input,.modal-form select{
+  width:100%; padding:10px 12px; border-radius:10px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.04); color:inherit;
+}
+
+/* ===========================
+   Responsive
+   =========================== */
+@media (max-width:1100px){
+  .cards.grid-4{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media (max-width:720px){
+  .admin-shell{ grid-template-columns:1fr; }
+  .cards.grid-4,.cards.grid-3,.cards.grid-2{ grid-template-columns:1fr; }
+  .modal-form .row{ grid-template-columns:1fr; }
+}
+/* LIGHT THEME (Sistem: light ise veya kullanıcı Açık seçerse uygulanır) */
+:root.light {
+  --bg:#f6f7fb;          /* sayfa zemini */
+  --bg-2:#ffffff;        /* topbar */
+  --panel:#ffffff;       /* sol panel */
+  --card:#ffffff;        /* kartlar */
+  --border:#e5e7eb;      /* sınırlar */
+  --muted:#6b7280;       /* ikincil metin */
+  --text:#0f172a;        /* ana metin */
+  --primary:#2563eb;     /* birincil */
+  --success:#16a34a;
+  --danger:#dc2626;
+}
+
+/* açık temada sidebar link hover’ları çok koyulaşmasın */
+:root.light .side-link:hover {
+  background: rgba(148,163,184,.12);
+  color:#0f172a;
+}
+:root.light .topbar .chip {
+  background:#ffffff; border-color:#e5e7eb; color:#6b7280;
+}
+/* light tema için örnek varyant */
+:root[data-theme="light"]{
+  --bg:#f8fafc; --bg-2:#ffffff; --panel:#ffffff; --text:#0f172a; --muted:#334155;
+  --card:#ffffff; --border:#e2e8f0;
+}
+/* === Settings (page-specific) === */
+.settings-page .page-title { margin: 0 0 16px; }
+.settings-page .set-section { border: 1px solid #273244; border-radius: 10px; padding: 16px; margin-bottom: 16px; background: rgba(255,255,255,0.02); }
+.settings-page .set-title { font-weight: 600; margin-bottom: 12px; color: #cbd5e1; }
+
+.settings-page .set-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  gap: 12px 24px;
+}
+.settings-page .set-grid .span-2 { grid-column: span 2; }
+
+.settings-page label { display: flex; align-items: center; gap: 8px; }
+.settings-page label > span:first-child { width: 170px; color: #9fb2c8; }
+.settings-page input[type="text"],
+.settings-page input[type="number"],
+.settings-page input[type="password"],
+.settings-page select {
+  width: 260px;
+}
+.settings-page .form-actions { display:flex; gap:8px; justify-content:flex-end; margin-top: 8px; }
+
+/* === Security (page-specific) === */
+.security-page .page-title { margin: 0 0 16px; }
+.security-page .sec-block { border: 1px solid #273244; border-radius: 10px; padding: 16px; margin-bottom: 16px; background: rgba(255,255,255,0.02); }
+.security-page .sec-title { font-weight: 600; margin-bottom: 12px; color:#cbd5e1; }
+.security-page .sec-hint { color:#8aa0b5; font-size: 12px; margin-top: 6px; }
+
+.security-page .switch-line { display:flex; align-items:center; gap:8px; }
+
+.security-page .sec-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(240px, 1fr));
+  gap: 12px 24px;
+  align-items: end;
+}
+.security-page .sec-grid label { display:flex; flex-direction: column; gap:6px; }
+.security-page .sec-grid label > span { color:#9fb2c8; }
+.security-page .sec-actions { display:flex; justify-content:flex-end; }
+/* ==== LAYOUT FIX: tam ekran koyu zemin, beyaz boşluk yok ==== */
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #0f172a;          /* sayfa zemini: koyu lacivert */
+  color: #e5e7eb;                /* varsayılan metin rengi */
+}
+
+/* Uygulama iskeleti tam yüksekliğe otursun */
+.admin-shell {
+  min-height: 100%;
+  background: #0f172a;           /* olası boşluklara karşı tekrar */
+}
+
+/* İç alanlar beyaz boşluk bırakmasın */
+.admin-main {
+  background: #0f172a;
+}
+
+/* Route içeriği (sayfa gövdesi) */
+.page {
+  background: #0f172a;           /* Safari’de görünen açık zeminleri bastır */
+  min-height: calc(100vh - 80px);/* topbar + biraz boşluk payı */
+}
+
+/* Kartlar koyu panel üstünde belirgin görünsün */
+.card {
+  background: #111827;           /* biraz daha açık koyu */
+  border: 1px solid #1f2937;
+}
+
+/* Bölüm kutuları (Ayarlar/Güvenlik blokları) */
+.section, .panel, .box {
+  background: #111827;
+  border: 1px solid #1f2937;
+}
+
+/* Form elemanları koyu temaya uyumlu dursun (varsa mevcutları ezmeden nazikçe) */
+.input, select, textarea {
+  background: #0b1220;
+  color: #e5e7eb;
+  border: 1px solid #1f2937;
+}
+
+.input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #2563eb;         /* mavi odak */
+  box-shadow: 0 0 0 2px #1d4ed855;
+}
+
+/* Badge / küçük rozetlerin koyu zeminde kontrastı */
+.badge.green  { background:#064e3b; color:#d1fae5; }
+.badge.red    { background:#7f1d1d; color:#fee2e2; }
+.badge.amber  { background:#78350f; color:#fef3c7; }
+
+/* Güvenlik ve Ayarlar sayfalarındaki bölüm kutuları */
+.settings-section,
+.security-section {
+  background:#111827;
+  border:1px solid #1f2937;
+  border-radius:12px;
+  padding:16px;
+}
+/* --- Settings lock butonları (küçük, satır içi) --- */
+.lock-btn{
+  margin-left: 8px;
+  font-size: 12px;
+  line-height: 1;
+  padding: 4px 6px;
+  border-radius: 6px;
+  border: 1px solid var(--card-border, #23304b);
+  background: transparent;
+  color: #9fb2d0;
+  cursor: pointer;
+}
+.lock-btn.on{
+  background: rgba(16,185,129,.08);        /* hafif yeşil vurgu */
+  border-color: rgba(16,185,129,.3);
+  color: #77d1a8;
+}
+
+/* form düzeni ile tam uyumlu küçük yardımcılar */
+.fieldset { border: 1px solid var(--card-border, #23304b); border-radius: 14px; padding: 16px 18px; margin: 16px 0; }
+.fieldset > legend { padding: 0 8px; opacity: .9; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(200px, 1fr)); gap: 16px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field.check { flex-direction: row; align-items: center; gap: 10px; }
+.form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }

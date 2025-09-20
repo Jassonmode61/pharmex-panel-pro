@@ -1,0 +1,75 @@
+[
+  {
+    "id": 1,
+    "date": "2025-09-02",
+    "customerName": "Ahmet Yılmaz",
+    "customerAddress": "İstanbul / Kadıköy",
+    "status": "Tamamlandı",
+    "items": [
+      { "name": "Aspirin", "qty": 2, "total": 40 },
+      { "name": "Vitamin C", "qty": 1, "total": 50 }
+    ],
+    "total": 90,
+    "shippingCompany": "PharmExpress"
+  },
+  {
+    "id": 2,
+    "date": "2025-09-05",
+    "customerName": "Ayşe Demir",
+    "customerAddress": "Ankara / Çankaya",
+    "status": "Teslim Edildi",
+    "items": [
+      { "name": "Alerji İlacı", "qty": 1, "total": 120 }
+    ],
+    "total": 120,
+    "shippingCompany": "PharmExpress"
+  },
+  {
+    "id": 3,
+    "date": "2025-09-12",
+    "customerName": "Mehmet Kaya",
+    "customerAddress": "İzmir / Bornova",
+    "status": "Hazırlanıyor",
+    "items": [
+      { "name": "Soğuk Algınlığı Şurubu", "qty": 1, "total": 75 }
+    ],
+    "total": 75,
+    "shippingCompany": "PharmExpress"
+  },
+  {
+    "id": 4,
+    "date": "2025-09-17",
+    "customerName": "Elif Arslan",
+    "customerAddress": "Bursa / Nilüfer",
+    "status": "Tamamlandı",
+    "items": [
+      { "name": "Ağrı Kesici", "qty": 3, "total": 150 }
+    ],
+    "total": 150,
+    "shippingCompany": "PharmExpress"
+  },
+  {
+    "id": 5,
+    "date": "2025-09-22",
+    "customerName": "Hasan Koç",
+    "customerAddress": "Antalya / Muratpaşa",
+    "status": "Teslim Edildi",
+    "items": [
+      { "name": "Demir Takviyesi", "qty": 2, "total": 200 }
+    ],
+    "total": 200,
+    "shippingCompany": "PharmExpress"
+  },
+  {
+    "id": 6,
+    "date": "2025-09-28",
+    "customerName": "Zeynep Uçar",
+    "customerAddress": "Eskişehir / Tepebaşı",
+    "status": "Hazırlanıyor",
+    "items": [
+      { "name": "Ateş Düşürücü", "qty": 1, "total": 65 }
+    ],
+    "total": 65,
+    "shippingCompany": "PharmExpress"
+  }
+]
