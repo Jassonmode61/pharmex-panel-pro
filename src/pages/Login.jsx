@@ -1,50 +1,103 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../auth/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { setSession } from "../utils/auth.js";
 
 export default function Login() {
-  const { login } = useAuth();
-  const nav = useNavigate();
-  const loc = useLocation();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [err, setErr] = useState("");
+  const navigate = useNavigate();
 
-  const onSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const res = await login(username.trim(), password);
-    if (res.ok) {
-      const to = loc.state?.from?.pathname || "/";
-      nav(to, { replace: true });
+
+    // basit, sabit kimlik doğrulama
+    if (username === "admin" && password === "Serdar61") {
+      // roller istersen genişletilebilir
+      setSession({ user: "admin", roles: ["Admin"] });
+      navigate("/dashboard", { replace: true });
     } else {
-      setErr(res.error || "Giriş başarısız");
+      alert("Kullanıcı adı veya şifre hatalı!");
     }
   };
 
   return (
-    <div style={{minHeight:"100vh",display:"grid",placeItems:"center",background:"#0f172a",color:"#e2e8f0"}}>
-      <form onSubmit={onSubmit} style={{background:"#111827", padding:24, borderRadius:12, width:340}}>
-        <h1 style={{marginBottom:16}}>Pharmex Panel • Giriş</h1>
-        <label>Kullanıcı adı</label>
+    <div style={{
+      minHeight: "100vh",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      background: "#0b1530"
+    }}>
+      <form onSubmit={handleSubmit} style={{
+        width: 340,
+        background: "#0f1b3f",
+        padding: "24px 22px",
+        borderRadius: 12,
+        boxShadow: "0 8px 30px rgba(0,0,0,.35)",
+        color: "#e8eefc",
+        border: "1px solid rgba(255,255,255,.06)"
+      }}>
+        <h2 style={{ margin: 0, marginBottom: 18, textAlign: "center" }}>
+          Pharmex Panel • Giriş
+        </h2>
+
+        <label style={{ display: "block", fontSize: 13, marginBottom: 6 }}>
+          Kullanıcı adı
+        </label>
         <input
+          type="text"
+          placeholder="kullanıcı adınızı girin"
           value={username}
-          onChange={e=>setUsername(e.target.value)}
-          placeholder="admin"
-          style={{width:"100%",padding:10,margin:"6px 0 12px",borderRadius:8,border:"1px solid #334155",background:"#0b1220",color:"#e2e8f0"}}
+          onChange={(e) => setUsername(e.target.value)}
+          autoComplete="username"
+          style={{
+            width: "100%",
+            padding: "10px 12px",
+            borderRadius: 8,
+            border: "1px solid #2a3a78",
+            background: "#0b1330",
+            color: "#e8eefc",
+            outline: "none",
+            marginBottom: 14
+          }}
         />
-        <label>Şifre</label>
+
+        <label style={{ display: "block", fontSize: 13, marginBottom: 6 }}>
+          Şifre
+        </label>
         <input
           type="password"
+          placeholder="şifrenizi girin"
           value={password}
-          onChange={e=>setPassword(e.target.value)}
-          placeholder="Serdar61"
-          style={{width:"100%",padding:10,margin:"6px 0 16px",borderRadius:8,border:"1px solid #334155",background:"#0b1220",color:"#e2e8f0"}}
+          onChange={(e) => setPassword(e.target.value)}
+          autoComplete="current-password"
+          style={{
+            width: "100%",
+            padding: "10px 12px",
+            borderRadius: 8,
+            border: "1px solid #2a3a78",
+            background: "#0b1330",
+            color: "#e8eefc",
+            outline: "none",
+            marginBottom: 18
+          }}
         />
-        {err && <div style={{color:"#f87171",marginBottom:12}}>{err}</div>}
-        <button type="submit" style={{width:"100%",padding:10,borderRadius:8,background:"#22c55e",border:"none",color:"#052e16",fontWeight:700}}>
+
+        <button
+          type="submit"
+          style={{
+            width: "100%",
+            padding: "10px 12px",
+            borderRadius: 8,
+            border: "none",
+            background: "#1db954",
+            color: "white",
+            fontWeight: 600,
+            cursor: "pointer"
+          }}
+        >
           Giriş Yap
         </button>
-        <p style={{opacity:.7,marginTop:10,fontSize:12}}>ipucu: admin / Serdar61</p>
       </form>
     </div>
   );
