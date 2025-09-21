@@ -1,32 +1,37 @@
-// vite.config.mjs
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
-export default defineConfig(({ command, mode }) => ({
+export default defineConfig({
   plugins: [react()],
-  // Render (statik site) için kök path:
-  base: '/',
-  // Build çıktısı Render'ın beklediği klasöre düşsün
-  build: { outDir: 'dist' },
 
-  // Yerelde çalışırken (npm run dev) geçerli
+  // Render statik hosting kökten servis eder, base '/' kalsın
+  base: "/",
+
+  // Geliştirme sunucusu (lokalde işine yarar, Render'da kullanılmıyor)
   server: {
     host: true,
     port: 5175,
     strictPort: true,
     proxy: {
-      '/api': {
-        target: 'http://localhost:5174',
+      "/api": {
+        target: "http://localhost:5174",
         changeOrigin: true,
         secure: false,
-        rewrite: p => p.replace(/^\/api/, ''),
+        rewrite: p => p.replace(/^\/api/, ""),
       },
     },
   },
 
-  // npm run preview (yerel prod önizleme) için
-  preview: {
-    port: 5175,
-    strictPort: true,
+  // Önemli kısım: modern hedef, TLA desteği
+  build: {
+    target: "esnext",   // Top-level await için
+    outDir: "dist",
+    modulePreload: { polyfill: false },
   },
-}))
+
+  // esbuild’e de aynı sinyali verelim
+  esbuild: {
+    target: "esnext",
+    supported: { "top-level-await": true },
+  },
+});
