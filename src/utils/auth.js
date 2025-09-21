@@ -1,19 +1,36 @@
-// src/utils/auth.js
+// Basit oturum yardımcıları (localStorage tabanlı)
 
-// Basit oturum mock'u: kullanıcı Admin + Destek rolleriyle varsayılır.
-// İstersen localStorage ile gerçek oturum da kullanabilirsin.
-export function getSession() {
+const KEY = "pharmex.session";
+
+// Oturumu kaydet
+export function setSession(session) {
   try {
-    const raw = localStorage.getItem("pharmex.session");
-    if (raw) return JSON.parse(raw);
-  } catch (_) {}
-  return {
-    user: { id: 1, name: "Dev Admin", roles: ["Admin", "Destek"] },
-  };
+    localStorage.setItem(KEY, JSON.stringify(session));
+  } catch (_) {
+    // storage kapalıysa sessiz geç
+  }
 }
 
+// Oturumu getir (yoksa null döner)
+export function getSession() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+// Oturumu temizle
+export function clearSession() {
+  try {
+    localStorage.removeItem(KEY);
+  } catch (_) {}
+}
+
+// Rollerden en az birine sahip mi?
 export function hasRole(session, roles = []) {
   if (!roles || roles.length === 0) return true;
-  const userRoles = session?.user?.roles || [];
+  const userRoles = session?.roles || session?.user?.roles || [];
   return roles.some((r) => userRoles.includes(r));
 }

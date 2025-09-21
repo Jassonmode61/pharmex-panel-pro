@@ -5,14 +5,17 @@ import { setSession } from "../utils/auth.js";
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading]   = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (loading) return;
 
-    // basit, sabit kimlik doğrulama
+    // Basit/sabit doğrulama
     if (username === "admin" && password === "Serdar61") {
-      // roller istersen genişletilebilir
+      setLoading(true);
+      // İster direkt roles alanı ver, ister user.roles içinde tut
       setSession({ user: "admin", roles: ["Admin"] });
       navigate("/dashboard", { replace: true });
     } else {
@@ -21,22 +24,29 @@ export default function Login() {
   };
 
   return (
-    <div style={{
-      minHeight: "100vh",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      background: "#0b1530"
-    }}>
-      <form onSubmit={handleSubmit} style={{
-        width: 340,
-        background: "#0f1b3f",
-        padding: "24px 22px",
-        borderRadius: 12,
-        boxShadow: "0 8px 30px rgba(0,0,0,.35)",
-        color: "#e8eefc",
-        border: "1px solid rgba(255,255,255,.06)"
-      }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#0b1530",
+      }}
+    >
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          width: 340,
+          background: "#0f1b3f",
+          padding: "24px 22px",
+          borderRadius: 12,
+          boxShadow: "0 8px 30px rgba(0,0,0,.35)",
+          color: "#e8eefc",
+          border: "1px solid rgba(255,255,255,.06)",
+        }}
+        // Safari/Chrome otomatik doldurma agresifliğini azalt
+        autoComplete="off"
+      >
         <h2 style={{ margin: 0, marginBottom: 18, textAlign: "center" }}>
           Pharmex Panel • Giriş
         </h2>
@@ -46,10 +56,12 @@ export default function Login() {
         </label>
         <input
           type="text"
-          placeholder="kullanıcı adınızı girin"
+          inputMode="text"
+          name="px_user"              // yaygın alan adlarından kaçın
+          autoComplete="off"          // otomatik doldurmayı kapat
+          placeholder="kullanıcı adınız"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          autoComplete="username"
           style={{
             width: "100%",
             padding: "10px 12px",
@@ -58,7 +70,7 @@ export default function Login() {
             background: "#0b1330",
             color: "#e8eefc",
             outline: "none",
-            marginBottom: 14
+            marginBottom: 14,
           }}
         />
 
@@ -67,10 +79,11 @@ export default function Login() {
         </label>
         <input
           type="password"
-          placeholder="şifrenizi girin"
+          name="px_pass"
+          autoComplete="new-password" // tarayıcıya "bunu kaydetme" iması
+          placeholder="••••••••"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          autoComplete="current-password"
           style={{
             width: "100%",
             padding: "10px 12px",
@@ -79,24 +92,25 @@ export default function Login() {
             background: "#0b1330",
             color: "#e8eefc",
             outline: "none",
-            marginBottom: 18
+            marginBottom: 18,
           }}
         />
 
         <button
           type="submit"
+          disabled={loading}
           style={{
             width: "100%",
             padding: "10px 12px",
             borderRadius: 8,
             border: "none",
-            background: "#1db954",
+            background: loading ? "#168c41" : "#1db954",
             color: "white",
             fontWeight: 600,
-            cursor: "pointer"
+            cursor: "pointer",
           }}
         >
-          Giriş Yap
+          {loading ? "Yönlendiriliyor…" : "Giriş Yap"}
         </button>
       </form>
     </div>
