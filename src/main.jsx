@@ -1,27 +1,24 @@
+// src/main.jsx
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./auth/AuthContext";
-import ProtectedRoute from "./auth/ProtectedRoute";
-import App from "./App";              // mevcut ana uygulaman
-import Login from "./pages/Login";
-import Logout from "./pages/Logout";
+import { BrowserRouter } from "react-router-dom";
+
+import App from "./App.jsx";
+
+// --- STYLES: hepsi burada toplansın ---
+import "./index.css";           // reset/minimal base
+import "./admin.css";           // tüm admin yerleşimi (senin büyük dosya)
+import "./styles/theme.css";    // varsa
+import "./styles/styles.css";   // varsa
+import "./styles/modal.css";    // varsa
+
+// İsteğe bağlı: sistem light/dark’a uysun
+// document.documentElement.classList.toggle("light", window.matchMedia("(prefers-color-scheme: light)").matches);
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
-      <AuthProvider>
-        <Routes>
-          {/* herkese açık: login */}
-          <Route path="/login" element={<Login />} />
-          {/* korumalı tüm rotalar */}
-          <Route element={<ProtectedRoute />}>
-            {/* mevcut tüm sayfaların '/*' altında App içinde olsun */}
-            <Route path="/*" element={<App />} />
-            <Route path="/logout" element={<Logout />} />
-          </Route>
-        </Routes>
-      </AuthProvider>
+      <App />
     </BrowserRouter>
   </React.StrictMode>
 );
