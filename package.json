@@ -11,7 +11,9 @@
     "preview": "vite preview --host",
     "clean": "rimraf node_modules .vite dist",
     "backup": "zip -r backup-$(date +%Y%m%d-%H%M).zip . -x \"node_modules/*\" \"dist/*\""
+    
   },
+
   "dependencies": {
     "dompurify": "^3.2.7",
     "react": "^18.3.1",
